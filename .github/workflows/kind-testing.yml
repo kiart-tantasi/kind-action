@@ -31,13 +31,13 @@ jobs:
       - name: Deploy Some Apps
         run: |
           kubectl apply -f https://kind.sigs.k8s.io/examples/ingress/usage.yaml
-      - name: Wait for containers to be ready (hack)
+      - name: Wait for Containers (hack)
         run: |
           sleep 20
       - name: CURL Ingress and Check Response
         run: |
           response=$(curl http://localhost/foo/hostname)
-          if ! echo "$response" | grep -qxF "foo"; then
-            echo "Error: Response does not match 'foo'"
+          if ! echo "$response" | grep -qxF "foo-app"; then
+            echo "Error: Response does not match"
             exit 1
           fi
