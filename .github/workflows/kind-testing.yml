@@ -16,9 +16,6 @@ jobs:
       - name: Create Kind Cluster with config
         run: |
           bash ./create-kind
-      - name: Get Kube's Info
-        run: |
-          kubectl cluster-info
       - name: Install ingress-nginx
         run: |
           kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
@@ -34,6 +31,9 @@ jobs:
       - name: Deploy Some Apps
         run: |
           kubectl apply -f https://kind.sigs.k8s.io/examples/ingress/usage.yaml
+      - name: Wait for containers to be ready (hack)
+        run: |
+          sleep 20
       - name: CURL Ingress
         run: |
           curl localhost/foo/hostname
