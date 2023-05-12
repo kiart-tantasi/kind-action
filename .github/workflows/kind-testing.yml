@@ -1,4 +1,4 @@
-name: Create Cluster
+name: Test Ingress
 
 on: push
 
@@ -15,13 +15,17 @@ jobs:
           sudo mv ./kind /usr/local/bin/kind
       - name: Create Kind Cluster with config
         run: |
-          bash ./kind-config
+          bash ./create-kind
       - name: Get Kube's Info
         run: |
           kubectl cluster-info
       - name: Install ingress-nginx
-        run: kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
-      - name: Wait for ingress-nginx set-up
+        run: |
+          kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+      - name: Wait for Resource (hack)
+        run: |
+          sleep 20
+      - name: Wait for ingress-nginx's Set-up
         run: |
           kubectl wait --namespace ingress-nginx \
             --for=condition=ready pod \
@@ -30,7 +34,7 @@ jobs:
       - name: Deploy Some Apps
         run: |
           kubectl apply -f https://kind.sigs.k8s.io/examples/ingress/usage.yaml
-      - name: CURL to Test Ingress
+      - name: CURL Ingress
         run: |
           curl localhost/foo/hostname
           curl localhost/bar/hostname
