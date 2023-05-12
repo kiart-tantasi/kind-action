@@ -8,6 +8,10 @@ jobs:
     steps:
       - name: Create k8s Kind Cluster
         uses: helm/kind-action@v1.4.0
+        with:
+          config: ./kind-config
+      - name: Install ingress-nginx
+        run: kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
       - name: Testing
         run: |
             kubectl cluster-info
