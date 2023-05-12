@@ -34,7 +34,10 @@ jobs:
       - name: Wait for containers to be ready (hack)
         run: |
           sleep 20
-      - name: CURL Ingress
+      - name: CURL Ingress and Check Response
         run: |
-          curl localhost/foo/hostname
-          curl localhost/bar/hostname
+          response=$(curl http://localhost/foo/hostname)
+          if ! echo "$response" | grep -qxF "foo"; then
+            echo "Error: Response does not match 'foo'"
+            exit 1
+          fi
