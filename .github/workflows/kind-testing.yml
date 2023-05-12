@@ -3,7 +3,7 @@ name: Test Ingress
 on: push
 
 jobs:
-  create-cluster:
+  test-ingress:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -13,7 +13,7 @@ jobs:
           curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.18.0/kind-linux-amd64
           chmod +x ./kind
           sudo mv ./kind /usr/local/bin/kind
-      - name: Create Kind Cluster with config
+      - name: Create Kind Cluster with Config
         run: |
           bash ./create-kind
       - name: Install ingress-nginx
@@ -34,7 +34,7 @@ jobs:
       - name: Wait for Containers (hack)
         run: |
           sleep 20
-      - name: CURL Ingress and Check Response
+      - name: Curl Ingress and Check Response
         run: |
           response=$(curl http://localhost/foo/hostname)
           if ! echo "$response" | grep -qxF "foo-app"; then
